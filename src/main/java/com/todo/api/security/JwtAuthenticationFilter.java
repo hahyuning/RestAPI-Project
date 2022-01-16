@@ -42,11 +42,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 log.info("Authenticated user Id : " + userId);
 
                 // 인증 완료
-                // SecurityContextHolder 에 등록
-                // credentials: 인증된 사용자의 정보, 보통 UserDetails 라는 오브젝트를 넣는다.
-                AbstractAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userId, null, AuthorityUtils.NO_AUTHORITIES);
+                AbstractAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        userId, // AuthenticationPrincipal
+                        null, // 인증된 사용자의 정보, 보통 UserDetails 라는 오브젝트를 넣는다.
+                        AuthorityUtils.NO_AUTHORITIES);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
+                // SecurityContextHolder 에 등록
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
                 securityContext.setAuthentication(authentication);
                 SecurityContextHolder.setContext(securityContext);
