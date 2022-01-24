@@ -30,7 +30,7 @@ public class UserController {
             UserEntity user = UserEntity.builder()
                     .email(userDTO.getEmail())
                     .username(userDTO.getUsername())
-                    .password(userDTO.getPassword())
+                    .password(passwordEncoder.encode(userDTO.getPassword()))
                     .build();
 
             UserEntity registeredUser = userService.create(user);
@@ -57,6 +57,8 @@ public class UserController {
                 passwordEncoder);
 
         if (user != null) {
+            log.info("로그인 성공");
+
             // 토큰 생성
             final String token = tokenProvider.create(user);
             final UserDTO responseUserDTO = UserDTO.builder()

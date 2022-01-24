@@ -16,11 +16,17 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    /**
+     * 회원 가입
+     */
     public UserEntity create(final UserEntity userEntity) {
+
         if (userEntity == null || userEntity.getEmail() == null) {
             throw new RuntimeException("Invalid arguments");
         }
+
         final String email = userEntity.getEmail();
+
         if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already exists");
         }
@@ -28,10 +34,17 @@ public class UserService {
         return userRepository.save(userEntity);
     }
 
+    /**
+     * 로그인
+     */
     @Transactional(readOnly = true)
-    public UserEntity getByCredentials(final String email, final String password, final PasswordEncoder encoder) {
+    public UserEntity getByCredentials(final String email,
+                                       final String password,
+                                       final PasswordEncoder encoder) {
+
         final UserEntity originalUser =  userRepository.findByEmail(email);
 
+        // 암호화 된 password 비교
         if (originalUser != null && encoder.matches(password, originalUser.getPassword())) {
             return originalUser;
         }
