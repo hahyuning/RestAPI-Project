@@ -57,7 +57,8 @@ public class TodoService {
         final Optional<TodoEntity> original = todoRepository.findById(todoEntity.getId());
         original.ifPresent(todo -> {
             todo.setTitle(todoEntity.getTitle());
-            todo.setDone(todo.isDone());
+            todo.setDone(todoEntity.isDone());
+            log.info("" + todo.isDone());
         });
 
         return retrieve(todoEntity.getUserId());
